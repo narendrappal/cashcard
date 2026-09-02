@@ -22,8 +22,25 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-restclient'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// Add the two dependencies below
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	implementation 'com.h2database:h2'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+test {
+	testLogging {
+		events "passed", "skipped", "failed" //, "standardOut", "standardError"
+
+		showExceptions true
+		exceptionFormat "full"
+		showCauses true
+		showStackTraces true
+
+		// Change to `true` for more verbose test output
+		showStandardStreams = true
+	}
 }
