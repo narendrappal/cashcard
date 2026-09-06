@@ -1,11 +1,10 @@
 package example.cashcard;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -24,5 +23,20 @@ public class CashCardController {
         }
         return ResponseEntity.notFound().build();
 //        return cashCardOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    /*
+    We were able to add UriComponentsBuilder ucb as a method argument to this
+    POST handler method and it was automatically passed in.
+    How so? It was injected from our now-familiar friend,
+    Spring's IoC Container. Thanks, Spring Web!
+     */
+    @PostMapping
+    ResponseEntity<Void> createCashCard(@RequestBody CashCard cashCard, UriComponentsBuilder uriComponentsBuilder) {
+        CashCard savedCashCard = cashCardRepository.save(cashCard);
+        URI locationOfCashCard = uriComponentsBuilder
+                .path("cashcards/{requestedId}")
+                .buildAndExpand(savedCashCard.id())
+                .toUri();
+        return ResponseEntity.created(locationOfCashCard).build();
     }
 }
