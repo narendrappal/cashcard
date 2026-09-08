@@ -58,6 +58,15 @@ public class CashCardController {
         return ResponseEntity.notFound().build();
     }
 
+    @DeleteMapping("/{id}")
+    private ResponseEntity<Void> deleteCashCard(@PathVariable Long id, Principal principal) {
+        if (cashCardRepository.existsByIdAndOwner(id, principal.getName())) {
+            cashCardRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @GetMapping
     private ResponseEntity<List<CashCard>> findAll(Pageable pageable, Principal principal) {
         Page<CashCard> page = cashCardRepository.findByOwner(principal.getName(),
