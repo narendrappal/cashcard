@@ -49,6 +49,9 @@ public class CashCardController {
 
     @PutMapping("/{requestedId}")
     ResponseEntity<Void> putCashCard(@PathVariable Long requestedId, @RequestBody CashCard cashCard, Principal principal) {
+        CashCard cashCardWithOwner = cashCardRepository.findByIdAndOwner(requestedId,principal.getName());
+        CashCard updateCard = new CashCard(cashCardWithOwner.id(),cashCard.amount(),principal.getName());
+        cashCardRepository.save(updateCard);
         return ResponseEntity.noContent().build();
     }
 
