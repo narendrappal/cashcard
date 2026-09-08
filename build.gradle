@@ -26,6 +26,9 @@ dependencies {
 	// Add the two dependencies below
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'com.h2database:h2'
+
+	// Spring boot security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
