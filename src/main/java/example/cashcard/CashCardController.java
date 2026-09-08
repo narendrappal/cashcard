@@ -47,6 +47,11 @@ public class CashCardController {
         return ResponseEntity.created(locationOfCashCard).build();
     }
 
+    @PutMapping("/{requestedId}")
+    ResponseEntity<Void> putCashCard(@PathVariable Long requestedId, @RequestBody CashCard cashCard, Principal principal) {
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping
     private ResponseEntity<List<CashCard>> findAll(Pageable pageable, Principal principal) {
         Page<CashCard> page = cashCardRepository.findByOwner(principal.getName(),
