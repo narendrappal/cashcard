@@ -183,6 +183,25 @@ class CashcardApplicationTests {
 		assertThat(amount).isEqualTo(19.99);
 	}
 
+	@Test
+	void shouldNotUpdateCashCardThatDoesNotExists(){
+		CashCard cashCard = new CashCard(null, 19.99, null);
+		HttpEntity<CashCard> httpEntity = new HttpEntity<>(cashCard);
+		ResponseEntity<Void> response = restTemplate
+				.withBasicAuth("sarah1","abc123")
+				.exchange("/cashcards/989898",HttpMethod.PUT,httpEntity,Void.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
+	void shouldNotUpdateACashCardThatIsOwnedBySomeoneElse() {
+		CashCard kumarsCard = new CashCard(null, 333.33, null);
+		HttpEntity<CashCard> request = new HttpEntity<>(kumarsCard);
+		ResponseEntity<Void> response = restTemplate
+				.withBasicAuth("sarah1", "abc123")
+				.exchange("/cashcards/102", HttpMethod.PUT, request, Void.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
 	//	@Test
 //	void contextLoads() {
 //	}
